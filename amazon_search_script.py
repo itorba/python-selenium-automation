@@ -12,22 +12,14 @@ service = Service(driver_path)
 driver = webdriver.Chrome(service=service)
 driver.maximize_window()
 
-# open the url
-driver.get('https://www.google.com/')
+driver.get("https://www.amazon.com")
+driver.find_element(By.ID,"twotabsearchtextbox").send_keys("table")
+driver.find_element(By.ID,"nav-search-submit-button").click()
 
-# populate search field
-search = driver.find_element(By.NAME, 'q')
-search.clear()
-search.send_keys('table')
+expected_result = '"table"'
+actual_result = driver.find_element(By.XPATH, "//span[@class='a-color-state a-text-bold']").text
+assert actual_result == expected_result, f'Expected {expected_result} bot got {actual_result}'
 
-# wait for 4 sec
-sleep(4)
-
-# click search button
-driver.find_element(By.NAME, 'btnK').click()
-
-# verify search results
-assert 'table' in driver.current_url.lower(), f"Expected query not in {driver.current_url.lower()}"
-print('Test Passed')
+print('Test case passed')
 
 driver.quit()
